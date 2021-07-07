@@ -1,0 +1,14 @@
+.login {
+    padding: 20px;
+    height: 50%;
+    width: 50%;
+    display: inline-block;
+}
+
+.login div{
+    margin: 5px;
+}
+
+.login div button{
+    margin: 5px;
+}

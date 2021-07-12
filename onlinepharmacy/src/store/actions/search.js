@@ -6,6 +6,7 @@ export const getSearchStart = (medicineIdArr, userLoc) => {
     type: actionTypes.GET_SEARCH_DATA_START,
     medicineIdArr: medicineIdArr,
     userLoc: userLoc,
+    hoverEle:''
   };
 };
 
@@ -16,12 +17,21 @@ export const getSearchSuccess = (data) => {
   };
 };
 
+
 export const getSearchFail = (error) => {
   return {
     type: actionTypes.GET_SEARCH_DATA_FAIL,
     error: error,
   };
 };
+
+export const setKeyOnHover = (key) => {
+  return {
+    type: actionTypes.SET_KEY_ON_HOVER,
+    key: key
+  };
+};
+
 
 export const onSearch = (medicineIdsArr, userLoc) => {
   return (dispatch) => {
@@ -59,6 +69,7 @@ export const onSearch = (medicineIdsArr, userLoc) => {
       .then((res) => res.json())
       .then(
         (responseData) => {
+          console.log("Search Data " + JSON.stringify(responseData["result"]["data"]));
           dispatch(getSearchSuccess(responseData["result"]["data"]));
         },
         (error) => {

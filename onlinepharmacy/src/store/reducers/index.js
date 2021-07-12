@@ -11,7 +11,11 @@ export default combineReducers({
 
 import { combineReducers } from 'redux'
 import search from "./search";
+import auth from './auth';
+import cart from './cart';
 
 export default combineReducers({
-  search
+  auth,
+  search,
+  cart
 })

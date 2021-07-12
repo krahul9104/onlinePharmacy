@@ -3,7 +3,7 @@ const Marker = (props) => (
     <div
       style={{
         color: "white",
-        background: "#c1a6e0",
+        background: (props.hoverkey === props.store_id)? 'red': "#c1a6e0",
         padding: "10px 10px",
         display: "inline-flex",
         textAlign: "center",

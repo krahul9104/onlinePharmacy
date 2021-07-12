@@ -10,3 +10,6 @@ export const MED_START ='MED_START';
 export const  MED_SUCCESS ='MED_SUCCESS';
 export const  MED_FAIL ='MED_FAIL';
 
+export const SET_KEY_ON_HOVER ='SET_KEY_ON_HOVER';
+export const MINUS_QTY='MINUS_QTY';
+export const ADD_QTY='ADD_QTY';

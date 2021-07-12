@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import * as actions from "../../store/actions/auth";
 import { connect } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
@@ -11,7 +10,8 @@ const UseStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
     padding: "15px",
-    backgroundColor: "#f8fff7",
+    backgroundColor: "#e1f5fe",
+    minHeight:'800px;'
   },
   paper: {
     padding: theme.spacing(2),
@@ -50,7 +50,7 @@ const HomePage = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    data: JSON.stringify(state),
+    data: state.search,
   };
 };
 

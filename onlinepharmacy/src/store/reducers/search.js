@@ -6,6 +6,7 @@ const intialState = {
   userLoc:'',
   medicineIdArr:[],
   data :[],
+  key:''
 };
 
 const search_reducer = (state = intialState, action) => {
@@ -33,6 +34,12 @@ const search_reducer = (state = intialState, action) => {
         errorData:action.error,
         error :'Error while fetching the data'
       };
+
+    case actionTypes.SET_KEY_ON_HOVER:
+        return {
+          ...state,
+          key:action.key
+        };  
 
     default: {
       return state;

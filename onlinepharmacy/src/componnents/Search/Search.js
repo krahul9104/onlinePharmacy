@@ -6,12 +6,17 @@ import Button from "@material-ui/core/Button";
 import * as actions from "../../store/actions/search";
 import { connect } from "react-redux";
 import * as apiDefaults from "../../../src/apiDefaultValues";
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const UseStyles = makeStyles((theme) => ({
   root: {
     "& > * + *": {
       marginTop: theme.spacing(3),
     },
+  },
+  centerDiv: {
+    margin: "auto",
+    width: "15%",
   },
 }));
 const Search = (props) => {
@@ -23,6 +28,7 @@ const Search = (props) => {
       lat: 17.51076335256882,
       lng: 78.38575149753446
   })
+
   useEffect(() => {
     const fetchMedicine = async () => {
       const headers = {
@@ -34,7 +40,7 @@ const Search = (props) => {
       );
       const responseData = await response.json();
       var medicineArr = [];
-      responseData["result"].map((key) => {
+      responseData["result"].forEach((key) => {
         medicineArr.push({
           label: key.u_medicine_name,
           value: key.sys_id,
@@ -44,12 +50,12 @@ const Search = (props) => {
       setMedicines(medicineArr);
     };
     fetchMedicine();
-  }, []);
+  },[]);
 
   const onChangeFilter = (event, value) => {
     var sys_ids = [];
     if (value.length > 0) {
-      value.map((key) => {
+      value.forEach((key) => {
         sys_ids.push(key.value + "");
       });
     }
@@ -99,7 +105,7 @@ const Search = (props) => {
           </div>
         </div>
       ) : (
-        <div>Loading ...</div>
+        <div><div className={classes.centerDiv}><CircularProgress /></div></div>
       )}
     </div>
   );

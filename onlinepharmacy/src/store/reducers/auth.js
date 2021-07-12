@@ -1,10 +1,12 @@
 import * as actionTypes from "../actions/actionTypes";
 
+
 const intialState = {
   email: "",
-  password: "",
-  error:false,
+  isValidUser:false,
+  error:'',
   loading: false,
+  userId : ''
 };
 
 const auth_reducer = (state = intialState, action) => {
@@ -15,6 +17,10 @@ const auth_reducer = (state = intialState, action) => {
       return {
         ...state,
         loading: true,
+        email:action.email,
+        isValidUser:false,
+        error :'',
+        userId:''
       };
 
     case actionTypes.AUTH_SUCCESS:
@@ -22,16 +28,21 @@ const auth_reducer = (state = intialState, action) => {
       return {
         ...state,
         loading: false,
-        data : action.authData,
-        response :'User Present'
+        isValidUser:true,
+        response :'User Present',
+        userId:action.authData.userId,
+        data : action.authData
       };
 
     case actionTypes.AUTH_FAIL:
       return {
         ...state,
         loading: false,
+        email:action.email,
         errorData:action.error,
-        error :'User Present'
+        error :'User Present/Password is not Correct. Please try again',
+        isValidUser:false,
+        userId:''
       };
 
     default: {

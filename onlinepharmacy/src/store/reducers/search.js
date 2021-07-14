@@ -13,6 +13,19 @@ const intialState = {
 
 const search_reducer = (state = intialState, action) => {
   switch (action.type) {
+    case actionTypes.INIT_SEARCH_DATA:
+      return {
+        ...state,
+        loading: true,
+        error:false,
+        userLoc:'',
+        medicineIdArr:[],
+        data :[],
+        key:'',
+        distance:100000,
+        storeType:'Both'
+      };
+
     case actionTypes.GET_SEARCH_DATA_START:
       return {
         ...state,

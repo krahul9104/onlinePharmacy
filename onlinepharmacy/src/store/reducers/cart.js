@@ -7,7 +7,7 @@ const intialState = {
   error:'',
   orderObj : {},
   userObj:{
-    firstName:'Rahul',
+    firstName:'',
     lastName:'',
     address:'',
     city:'',
@@ -28,6 +28,28 @@ const intialState = {
 const search_reducer = (state = intialState, action) => {
 
   switch (action.type) {
+    case actionTypes.INIT_CART_DATA:
+      return {
+        ...state,
+        orderObj : {},
+        userObj:{
+          firstName:'',
+          lastName:'',
+          address:'',
+          city:'',
+          state_Country: '',
+          zipcode:'',
+          country:'',
+          sameAddressforPayment:'yes'
+        },
+        cardObj:{
+          nameOnCard:'',
+          cardCCNumber:'',
+          cardExpDate:'',
+          cardCVV:'',
+          remeberCard:'Yes'
+        }
+      };
     case actionTypes.ADD_QTY:
       return {
         ...state,

@@ -56,12 +56,17 @@ export const saveOrderFail=(error) =>{
   };
 }
 
+
+export const initCartStoreData=() =>{
+  return {
+    type: actionTypes.INIT_CART_DATA,
+  };
+}
+
 export const saveOrder = (obj) => {
   return (dispatch) => {
     dispatch(saveOrderStart());
     const requestOptions = apiDefaults.POST_API_HEADER(obj);
-    
-    console.log("data sent to DB" +JSON.stringify(obj));
     fetch(
       apiDefaults.SAVE_ORDER_API,
       requestOptions
@@ -70,6 +75,7 @@ export const saveOrder = (obj) => {
       .then(
         (responseData) => {
           dispatch(saveOrderSuccess(responseData["result"]["orderNumber"]));
+
         },
         (error) => {
           dispatch(saveOrderFail(error));

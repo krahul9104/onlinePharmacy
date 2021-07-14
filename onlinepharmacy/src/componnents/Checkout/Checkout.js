@@ -10,7 +10,8 @@ import AddressForm from "./AddressForm";
 import PaymentForm from "./Payment";
 import Review from "./Review";
 import { connect } from "react-redux";
-import * as actions from "../../store/actions/cart";
+import * as actionsCart from "../../store/actions/cart";
+import * as actionsSearch from "../../store/actions/search";
 import {useHistory} from "react-router-dom";
 import { Redirect } from "react-router-dom";
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -99,6 +100,15 @@ const Checkout = (props) => {
     setActiveStep(activeStep - 1);
   };
 
+  const oncklReturnHome= (e)=>{
+    props.initCartStore();
+    props.initSearchStore();
+    setoderPlaced(true);
+  }
+  
+  
+  
+
   const orderMsg= ( !props.saveOrderLoading ? (<div>
     <Typography variant="h5" gutterBottom>
       Thank you for your order.
@@ -111,7 +121,7 @@ const Checkout = (props) => {
     <div>
       <Button 
         variant="contained"
-        onClick={(e)=>{setoderPlaced(true)}} 
+        onClick={(e)=>{oncklReturnHome(e)}} 
         className={classes.button}>
           Return to Home
         </Button></div>
@@ -200,7 +210,9 @@ const mapStateToProps = (state) => {
 const mapDispatchtoProps = (dispatch) => {
   return {
     saveOrder: (obj) =>
-    dispatch(actions.saveOrder(obj)),
+    dispatch(actionsCart.saveOrder(obj)),
+    initCartStore: (obj) =>dispatch(actionsCart.initCartStoreData()),
+    initSearchStore: (obj) =>dispatch(actionsSearch.initSearchStoreData()),
   };
 };
 

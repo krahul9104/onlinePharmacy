@@ -12,6 +12,7 @@ export const getSearchStart = (medicineIdArr, userLoc,distance,storeType) => {
   };
 };
 
+
 export const getSearchSuccess = (data) => {
   return {
     type: actionTypes.GET_SEARCH_DATA_SUCCESS,
@@ -26,6 +27,11 @@ export const sortSearchData = (sortBy) => {
   };
 };
 
+export const initSearchStoreData=() =>{
+  return {
+    type: actionTypes.INIT_SEARCH_DATA,
+  };
+}
 
 export const getSearchFail = (error) => {
   return {

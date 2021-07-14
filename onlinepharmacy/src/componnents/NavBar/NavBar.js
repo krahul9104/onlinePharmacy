@@ -14,22 +14,16 @@ const NavBar = (props) => {
     <div>
       <Switch>
       <Route path ='/login' component={Login} />
-          {props.data.isValidUser ? (
-            <Route path="/HomePage" component={HomePage} />
-
-          ):<Redirect to="/login" /> }
-           {props.data.isValidUser ? (
-            <Route path="/cart" component={Cart} />
-            
-          ):<Redirect to="/login" /> }
-          {props.data.isValidUser ? (
-            <Route path="/orders" component={Orders} />
-          ):<Redirect to="/login" /> }
-          {props.data.isValidUser ? (
-            <Route path="/checkout" component={Checkout} />
-          ) : <Redirect to="/login" />}
-          <Route path="/" render={() => <Redirect to="/Login" />} />
+        <Route path="/HomePage" component={HomePage} />
+        <Route path="/Medicine" component={Medicine} />
+        <Route path="/orders" component={Orders} />
+        <Route path="/checkout" component={Checkout} />
+        <Route path="/cart" component={Cart} />
+        <Route path="/" render={() => <Redirect to="/Login" />} />
         </Switch>
+
+
+
     </div>
   );
 };
@@ -46,6 +40,31 @@ const mapDispatchtoProps = (dispatch) => {
 
 export default connect(mapStateToProps, mapDispatchtoProps)(NavBar);
 
+
+
+/*
+
+<Switch>
+      <Route path ='/login' component={Login} />
+          {props.data.isValidUser ? (
+            <Route path="/HomePage" component={HomePage} />
+
+          ):<Redirect to="/login" /> }
+           {props.data.isValidUser ? (
+            <Route path="/cart" component={Cart} />
+            
+          ):<Redirect to="/login" /> }
+          {props.data.isValidUser ? (
+            <Route path="/orders" component={Orders} />
+          ):<Redirect to="/login" /> }
+          {props.data.isValidUser ? (
+            <Route path="/checkout" component={Checkout} />
+          ) : <Redirect to="/login" />}
+          <Route path="/" render={() => <Redirect to="/Login" />} />
+        </Switch>
+
+
+*/
 /*
 
 <Route path ='/login' component={Login} />

@@ -1,17 +1,18 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import Grid from "@material-ui/core/Grid";
+import {Grid,Tooltip }from "@material-ui/core";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import ButtonBase from "@material-ui/core/ButtonBase";
 import Avatar from "@material-ui/core/Avatar";
-import { deepOrange, green, grey } from "@material-ui/core/colors";
+import { deepOrange, green } from "@material-ui/core/colors";
 import StoreIcon from "@material-ui/icons/Store";
 import Button from "@material-ui/core/Button";
-import Link from '@material-ui/core/Link';
-import { useHistory } from 'react-router-dom';
+import Link from "@material-ui/core/Link";
+import { useHistory } from "react-router-dom";
 import { connect } from "react-redux";
-import * as actions from "../../store/actions/search";
+import * as actionSearch from "../../store/actions/search";
+import * as actionCart from "../../store/actions/cart";
 
 const UseStyles = makeStyles((theme) => ({
   root: {
@@ -24,6 +25,9 @@ const UseStyles = makeStyles((theme) => ({
     maxWidth: 500,
     textAlign: "left",
     backgroundColor: "#ede7f6",
+    "&:hover": {
+      backgroundColor: "#ffd180",
+    },
   },
   image: {
     width: 128,
@@ -37,7 +41,7 @@ const UseStyles = makeStyles((theme) => ({
   },
   square: {
     color: theme.palette.getContrastText(deepOrange[500]),
-    backgroundColor: grey[300],
+    backgroundColor: "#ffe0b2",
     width: "70%",
     height: "70%",
   },
@@ -47,76 +51,111 @@ const UseStyles = makeStyles((theme) => ({
   },
 }));
 
-
 const MapList = (props) => {
   const classes = UseStyles();
   const history = useHistory();
 
-  const onBtnClick =(e,v)=>{
-    history.push('/Checkout');
+  const onBtnClick = (e, props) => {
+    var orderObj = props;
+    props.onClickOrder(orderObj);
+    history.push("/Cart");
   };
 
-
-  const mouseOver = (e) => {
-
-     var key=e.target.store_id; 
-     console.log(key);
-     console.log(e.target);
-     props.onHover(key);
+  const mouseOver = (e, store_id) => {
+    props.onHover(store_id);
   };
-   
-
 
   const mouseOut = () => {
-     props.onHover('');
+    props.onHover("");
   };
 
+  const tooltipText = "All medecines are not available in this store";
+  const orderBtn = (
+    <Button
+      variant="contained"
+      onClick={(e) => onBtnClick(e, props)}
+      store_id={props.store_id}
+    >
+      Order
+    </Button>
+  );
+
+  const orderButtonwithToolTipCond =
+    props.medicineSearchCount !== props["No of Search Medicine Available"] ? (
+      <Tooltip title={tooltipText}>{orderBtn}</Tooltip>
+    ) : (
+     <div> { orderBtn }</div>
+    );
+  const inputStyleList =
+    props.index === 0 ? { border: "5px solid #ffab00" } : { border: "none" };
   return (
-    <div className={classes.root}  key ={props.store_id} >
-      <Paper className={classes.paper}>
-                    <div>
-              {props.store_id}</div>
-      <div >
-        <Grid container spacing={2}  >
-          <Grid item>
-            <ButtonBase
-              className={classes.image}
-              style={{ border: "1px solid #e8e8e8" }}
-            >
-              <Avatar
-                variant="square"
-                className={classes.square}
-                style={{color:(1== 2) ?deepOrange[500]:green[500] }}
-              >
-                <StoreIcon></StoreIcon>
-              </Avatar>
-            </ButtonBase>
-          </Grid>
-          <Grid item xs={12} sm container>
-            <Grid item xs container direction="column" spacing={2}>
-              <Grid item xs>
-                <Typography gutterBottom variant="subtitle1">
-                  <b> {props.store_name}</b>
-                </Typography>
-                <Typography gutterBottom variant="subtitle1">
-                  
-                </Typography>
-                <Typography variant="body2" gutterBottom>
-                <b>Store Average Disctance from your Location : </b>
-                  {props["Distance of Store"]}
+    <div className={classes.root} key={props.store_id}>
+      <Paper className={classes.paper} style={inputStyleList}>
+        {props.index === 0 ? (
+          <div>
+            <b>Best Result</b>{" "}
+          </div>
+        ) : (
+          ""
+        )}
+        <div
+          onMouseOver={(e) => mouseOver(e, props.store_id)}
+          onMouseOut={(e) => mouseOut(e)}
+        >
+          <Grid container spacing={2}>
+            <Grid item xs={4}>
+              <ButtonBase className={classes.image}>
+                <Avatar
+                  variant="square"
+                  className={classes.square}
+                  style={{
+                    color:
+                      props.storeType === "Online"
+                        ? deepOrange[500]
+                        : green[500],
+                  }}
+                >
+                  <StoreIcon></StoreIcon>
+                </Avatar>
+              </ButtonBase>
+            </Grid>
+            <Grid item xs={8}>
+              <Grid item container>
+                <Grid item sm={6}>
+                  <Typography gutterBottom variant="subtitle1">
+                    <b> {props.store_name}</b>
+                  </Typography>
+                </Grid>
+                <Grid item sm={6}>
+                  <Typography variant="subtitle1">
+                    Total Price : Rs.{props.price}
+                  </Typography>
+                </Grid>
+              </Grid>
+              <Grid item xs={12} sm container>
+                <Typography variant="body2" color="body2" gutterBottom>
                   <div>
-                    {" "}
-                    <b>Address</b> :{" "}
-                    {props["Store Address"] +
-                      " " +
-                      props["Store City"] +
-                      " " +
-                      500081}
+                    <b>
+                      Esitmate Delivery Time : {props["deliveryTime"]} Hours
+                    </b>
                   </div>
-                </Typography>
-                <Typography variant="body2" color="textSecondary">
-                  <div>Contact Number : 9112345678</div>
-                  <div>Email Address : store@gmail.com</div>
+                  <div>
+                    {props.storeType === "Offline" ? (
+                      <b>Store Disctance : {props["Distance of Store"]} Km</b>
+                    ) : (
+                      ""
+                    )}
+                  </div>
+                  <div>
+                    Medicine Available :{" "}
+                    {props["No of Search Medicine Available"]}
+                  </div>
+                  <div>Contact Number : {props.storeContactNumber}</div>
+                  <div>Email Address : {props.storeEmailAddress}</div>
+                  <div>
+                    Address :{" "}
+                    {props["Store Address"] + " " + props["Store City"] + " "}
+                  </div>
                   <div>
                     <Link
                       component="button"
@@ -125,31 +164,33 @@ const MapList = (props) => {
                         console.info("I'm a button.");
                       }}
                     >
-                      Store Directions
+                      {props.storeType === "Offline"
+                        ? "Store Directions"
+                        : "Click here to visit store website"}
                     </Link>
                   </div>
                 </Typography>
               </Grid>
-              <Grid item>
-                <Button variant="contained" onClick={(e, v) => onBtnClick(e, v)} store_id={props.store_id} onMouseOver={(e) => mouseOver(e)} onMouseOut={(e) => mouseOut(e)} >Order</Button>
-              </Grid>
-            </Grid>
-            <Grid item>
-              <Typography variant="subtitle1">Total Price : Rs.{props.price}</Typography>
-              <Typography variant="subtitle1">Discount : Rs.{props.discount}</Typography>
+              <div>{orderButtonwithToolTipCond}</div>
             </Grid>
           </Grid>
-        </Grid>
         </div>
       </Paper>
     </div>
   );
 };
 
-const mapDispatchtoProps = (dispatch) => {
+const mapStateToProps = (state) => {
   return {
-    onHover: (key) => dispatch(actions.setKeyOnHover(key))
+    medicineSearchCount: state.search.medicineIdArr.length,
   };
 };
 
-export default connect(null, mapDispatchtoProps)(MapList);
+const mapDispatchtoProps = (dispatch) => {
+  return {
+    onHover: (store_id) => dispatch(actionSearch.setKeyOnHover(store_id)),
+    onClickOrder: (orderObj) => dispatch(actionCart.onOrder(orderObj)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchtoProps)(MapList);

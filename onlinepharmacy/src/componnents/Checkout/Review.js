@@ -5,21 +5,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Grid from '@material-ui/core/Grid';
-
-const products = [
-  { name: 'Product 1', desc: 'A nice thing', price: '$9.99' },
-  { name: 'Product 2', desc: 'Another thing', price: '$3.45' },
-  { name: 'Product 3', desc: 'Something else', price: '$6.51' },
-  { name: 'Product 4', desc: 'Best thing of all', price: '$14.11' },
-  { name: 'Shipping', desc: '', price: 'Free' },
-];
-const addresses = ['1 Material-UI Drive', 'Reactville', 'Anytown', '99999', 'USA'];
-const payments = [
-  { name: 'Card type', detail: 'Visa' },
-  { name: 'Card holder', detail: 'Mr John Smith' },
-  { name: 'Card number', detail: 'xxxx-xxxx-xxxx-1234' },
-  { name: 'Expiry date', detail: '04/2024' },
-];
+import { connect } from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
   listItem: {
@@ -33,28 +19,34 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Review() {
+const Review =(props) =>{
   const classes = useStyles();
+
+   
 
   return (
     <React.Fragment>
       <Typography variant="h6" gutterBottom>
         Order summary
       </Typography>
-      <div style={{ borderBottom: "4px solid #e8e8e8",margin: "5px",}}></div>
-      <List disablePadding>
-        {products.map((product) => (
-          <ListItem className={classes.listItem} key={product.name}>
-            <ListItemText primary={product.name} secondary={product.desc} />
-            <Typography variant="body2">{product.price}</Typography>
-          </ListItem>
+      <div style={{ borderBottom: "4px solid #e8e8e8",margin: "5px"}}></div>
+      <List >
+        {props.orderObj.MedicineDetails.map((med) => (
+          <div >
+           <Grid container spacing={5}>
+             <Grid item sm={4} lg={4} md={4} style={{textAlign:'left'}}><b>{med.medicineName}</b></Grid>
+             <Grid item sm={4} lg={4} md={4} style={{textAlign:'left'}}>{med.medicineQty}</Grid>
+             <Grid item sm={4} lg={4} md={4} style={{textAlign:'right'}}>{med.priceofMedicine}</Grid>
+           </Grid>
+          </div>
         ))}
         <ListItem className={classes.listItem}>
-          <ListItemText primary="Total" />
+          <ListItemText primary="Total Amout to Paid after Discount" />
           <Typography variant="subtitle1" className={classes.total}>
-            $34.06
+             {props.orderObj.price - props.orderObj.discount}
           </Typography>
         </ListItem>
+        
         <div style={{ borderBottom: "4px solid #e8e8e8",margin: "5px",}}></div>
       </List>
       <Grid container spacing={2} style={{marginTop:'15px'}}>
@@ -62,27 +54,58 @@ export default function Review() {
           <Typography variant="h6" gutterBottom className={classes.title}>
             Shipping
           </Typography>
-          <Typography gutterBottom>John Smith</Typography>
-          <Typography gutterBottom>{addresses.join(', ')}</Typography>
+          <Typography gutterBottom>{props.userObj.firstName +' '+props.userObj.lastName}</Typography>
+          <Typography gutterBottom>
+            <div>
+            {props.userObj.address}
+            </div>
+            <div>
+            {props.userObj.city + ' '+ props.userObj.state_Country +' ' +props.userObj.zipcode}
+            </div>
+            </Typography>
         </Grid>
         <Grid item container direction="column" xs={12} sm={6}>
           <Typography variant="h6" gutterBottom className={classes.title}>
             Payment details
           </Typography>
-          <Grid container>
-            {payments.map((payment) => (
-              <React.Fragment key={payment.name}>
+          <Grid container >
+              <React.Fragment key={props.cardObj.nameOnCard}>
                 <Grid item xs={6}>
-                  <Typography gutterBottom>{payment.name}</Typography>
+                  <Typography gutterBottom>
+                    <div>Card holder</div>
+                    <div>Card number</div>
+                    <div>Expiry date</div>
+                    <div>Remember Card </div>
+                    </Typography>
                 </Grid>
                 <Grid item xs={6}>
-                  <Typography gutterBottom>{payment.detail}</Typography>
+                <Typography gutterBottom>
+                    <div>{props.cardObj.nameOnCard}</div>
+                    <div>{props.cardObj.cardCCNumber}</div>
+                    <div>{props.cardObj.cardExpDate}</div>
+                    <div>{props.cardObj.remeberCard}</div>
+                    </Typography>
                 </Grid>
               </React.Fragment>
-            ))}
           </Grid>
         </Grid>
       </Grid>
     </React.Fragment>
   );
 }
+
+const mapStateToProps = (state) => {
+  console.log(state.cart);
+  return {
+    orderObj:state.cart.orderObj,
+    userObj :state.cart.userObj,
+    cardObj:state.cart.cardObj
+  };
+};
+
+const mapDispatchtoProps = (dispatch) => {
+  return {
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchtoProps)(Review);

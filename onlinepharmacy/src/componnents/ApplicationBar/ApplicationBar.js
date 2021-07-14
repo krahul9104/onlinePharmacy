@@ -9,7 +9,6 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import MenuIcon from "@material-ui/icons/Menu";
 import AccountCircle from "@material-ui/icons/AccountCircle";
-import MailIcon from "@material-ui/icons/Mail";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import MoreIcon from "@material-ui/icons/MoreVert";
 import AppBar from "@material-ui/core/AppBar";
@@ -19,12 +18,14 @@ import Divider from "@material-ui/core/Divider";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
 import { NavLink } from "react-router-dom";
 import AddShoppingCartRoundedIcon from '@material-ui/icons/AddShoppingCartRounded';
 import { connect } from "react-redux";
 import Tooltip from '@material-ui/core/Tooltip';
-
+import LockOpenIcon from '@material-ui/icons/LockOpen';
+import ListAltIcon from '@material-ui/icons/ListAlt';
+import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
+import LocalPharmacyIcon from '@material-ui/icons/LocalPharmacy';
 const useStyles = makeStyles((theme) => ({
   grow: {
     flexGrow: 1,
@@ -43,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: theme.shape.borderRadius,
     backgroundColor: fade(theme.palette.common.white, 0.15),
     "&:hover": {
-      backgroundColor: fade(theme.palette.common.white, 0.25),
+      backgroundColor: fade(theme.palette.common.white, 0.15),
     },
     marginRight: theme.spacing(2),
     marginLeft: 0,
@@ -89,6 +90,7 @@ const useStyles = makeStyles((theme) => ({
   },
   list: {
     width: 250,
+    borderBottom:'1px solid red',
   },
   fullList: {
     width: "auto",
@@ -195,6 +197,16 @@ const ApplicationBar = (props) => {
   const covertToPascalcase =(str) =>{
     return (str.replace(/\w+/g,function(w){return w[0].toUpperCase() + w.slice(1).toLowerCase();}));
   }
+  const ListIcon =(text) =>{
+    var icon =<LockOpenIcon />
+    if(text=='Cart')
+       icon=<AddShoppingCartIcon/>
+   else if (text=='HomePage')
+       icon = <LocalPharmacyIcon />
+   else if (text=='Orders')
+   icon = <ListAltIcon />
+          return icon;
+  }
   const list = (anchor) => (
     <div
       className={clsx(classes.list, {
@@ -203,13 +215,14 @@ const ApplicationBar = (props) => {
       role="presentation"
       onClick={toggleDrawer(anchor, false)}
       onKeyDown={toggleDrawer(anchor, false)}
+      style={{backgroundColor:'#bbdefb',height:'100%' , }}
     >
       <List>
-        {["Login","HomePage","Orders", "Customer"].map((text, index) => (
-          <NavLink activeClassName="active" to={'/'+covertToPascalcase(text)}>
-            <ListItem button key={text}>
+        {["Login","HomePage","Cart","Orders"].map((text, index) => (
+          <NavLink activeClassName="active" to={'/'+covertToPascalcase(text)} key ={text}>
+            <ListItem button key={text} >
               <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                {ListIcon(text)}
               </ListItemIcon>
               <ListItemText primary={text} />
             </ListItem>
@@ -248,8 +261,8 @@ const ApplicationBar = (props) => {
   return (
     <div>
       
-      <div>
-        <React.Fragment key={anchor}>
+      <div >
+        <React.Fragment key={anchor}  >
           <Drawer
             anchor={anchor}
             open={state[anchor]}
@@ -273,7 +286,7 @@ const ApplicationBar = (props) => {
               <MenuIcon />
             </IconButton>
             <Typography className={classes.title} variant="h6" noWrap>
-              Online Phramacy
+             <LocalPharmacyIcon /> Online Phramacy
             </Typography>
             <div className={classes.grow} />
             

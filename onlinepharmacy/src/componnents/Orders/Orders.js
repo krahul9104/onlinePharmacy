@@ -52,17 +52,18 @@ const UseStyles = makeStyles((theme) => ({
   },
   medDiv: {
     border: "1px solid #e8e8e8",
-    padding: "5px",
+    padding: "2px",
     margin: "5px",
-    backgroundColor:'#e8eaf6',
+    backgroundColor:'#e0f7fa',
     borderRadius:'10px'
   },
   medList: {
-    padding: "5px",
+    padding: "10px",
     width: "90%",
     marginLeft: "4%",
   },
   accordian:{
+    border:'1px solid #e8e8e8'
 } 
 }));
 
@@ -92,7 +93,14 @@ const Order = () => {
 
         //console.log("data from orders " + JSON.stringify(json));
         setisLoading(false);
-        setorders(json["result"]["data"]);
+        var obj =json["result"]["data"];
+
+          obj.sort(function (a, b) {
+            var str1=a['order_number'].toString();
+            var str2=b['order_number'].toString();
+            return str2.localeCompare(str1);
+       });
+        setorders(obj);
       } catch (e) {
         console.error(e);
       }
@@ -107,8 +115,8 @@ const Order = () => {
     <div style={{}}>
       {orders.map((order, index) => (
         <Accordion className={classes.accordian}
-          expanded={expanded === "panel" + order.order_id}
-          onChange={handleChange("panel" + order.order_id)}
+          expanded={expanded === "panel" + order.order_number}
+          onChange={handleChange("panel" + order.order_number)}
         >
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
@@ -134,7 +142,7 @@ const Order = () => {
                 {order.order_date}
               </Grid>
               <Grid item lg={2}>
-                {order.order_status}
+               <div style={{color:order.order_status ==='Order Accepted'? 'green' :'red'}}> {order.order_status}</div>
               </Grid>
               <Grid item lg={2}>
                 {order.order_amount}
@@ -142,7 +150,7 @@ const Order = () => {
             </Grid>
           </AccordionSummary>
           <AccordionDetails>
-            <List className={classes.medList} style={{ padding: "10px" }}>
+            <List className={classes.medList} style={{ padding: "10px" ,  }}>
               {order.order_med_details.map((med, i) => (
                 <div className={classes.medDiv}>
                   <ListItem>
@@ -177,12 +185,17 @@ const Order = () => {
           <Grid item lg={1} md={1} sm={12} xs={12}></Grid>
           <Grid item lg={10} md={10} sm={12} xs={12}>
             <div>
-              <Paper className={classes.paperHeading} elevation={1}>
-                <Typography variant="h5" gutterBottom justifyContent="left">
-                  <div><b>Your Orders</b></div>
+            <div>
+              <Paper>
+              <Typography component="h1" variant="h4" align="center">
+                  Your Orders
                 </Typography>
+                <div style={{marginTop: "10px", borderBottom: "5px solid #e8e8e8", padding: "10px",}}></div>
+                <div style={{padding: "20px",marginTop: "10px"}}>{isLoading ? <CircularProgress /> : orderDetails}</div>
               </Paper>
-              {isLoading ? <CircularProgress /> : orderDetails}
+             
+              </div>
+              
             </div>
           </Grid>
         </Grid>

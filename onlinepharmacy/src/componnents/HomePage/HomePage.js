@@ -17,7 +17,7 @@ const UseStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
     textAlign: "center",
     color: theme.palette.text.secondary,
-    height: "500px",
+    minHeight: "80px",
   },
 }));
 const HomePage = (props) => {
@@ -36,7 +36,7 @@ const HomePage = (props) => {
         <Grid container spacing={5}>
           <Grid item xs={12}>
             <div style={{}}>
-              <Paper className={classes.paper} style={{ height: "150px" }}>
+              <Paper className={classes.paper}>
                 <Search></Search>
               </Paper>
             </div>

@@ -1,49 +1,27 @@
 import * as actionTypes from "../actions/actionTypes";
 
 const intialState = {
+  saveOrderLoading:false,
+  orderNumber:'',
   loading: true,
-  error:false,
-  orderObj : {
-      CompanyName: "Apollo Pharmacy",
-      "Store Address": "JNTU",
-      "Store City": "Hyderabad",
-      "Distance of Store": "2.68  Km",
-      "Total Price": 100,
-      discount: 0,
-      promocode: "",
-    medicines: [
-      {
-        medicineId: "6e0570e31bcdb010060965b3b24bcb04",
-        medicineDescription:
-          " It is used to treat type 2 diabetes mellitus in adults, when it cannot be controlled by diet or exercise.",
-        "mediicneComposition ": "vildagliptin",
-        price: 75,
-        discount: 10,
-        selectedUnit:1,
-        AvilableUnits: 234,
-      },
-      {
-        medicineId: "25c7b8271bcdb010060965b3b24bcb1c",
-        medicineDescription:
-          "reduces the amount of acid produced in your stomach",
-        "mediicneComposition ": "pantoprazole",
-        price: 95,
-        discount: 10,
-        selectedUnit:1,
-        AvilableUnits: 20,
-      },
-      {
-        medicineId: "25c7b8271bcdb010060965b3b24bcb1c",
-        medicineDescription:
-          "reduces the amount of acid produced in your stomach",
-        "mediicneComposition ": "pantoprazole",
-        CompanyName: "Apollo Pharmacy",
-        price: 95,
-        discount: 10,
-        selectedUnit:1,
-        AvilableUnits: 20,
-      },
-    ],
+  error:'',
+  orderObj : {},
+  userObj:{
+    firstName:'Rahul',
+    lastName:'',
+    address:'',
+    city:'',
+    state_Country: '',
+    zipcode:'',
+    country:'',
+    sameAddressforPayment:'yes'
+  },
+  cardObj:{
+    nameOnCard:'',
+    cardCCNumber:'',
+    cardExpDate:'',
+    cardCVV:'',
+    remeberCard:'Yes'
   }
 };
 
@@ -53,13 +31,52 @@ const search_reducer = (state = intialState, action) => {
     case actionTypes.ADD_QTY:
       return {
         ...state,
+        orderObj:action.orderObj
       };
 
     case actionTypes.MINUS_QTY:
       return {
         ...state,
+        orderObj:action.orderObj
       };
 
+    case actionTypes.ON_ORDER:
+    return {
+          ...state,
+          orderObj:action.orderObj
+    };  
+    case actionTypes.ON_CHANGE_USER_FLD:
+    return {
+          ...state,
+          userObj:action.userObj
+    };  
+
+    case actionTypes.ON_CHANGE_PAY_FLD:
+    return {
+          ...state,
+          cardObj:action.cardObj
+    };  
+
+    case actionTypes.SAVE_ORDER_STAR:
+      return {
+            ...state,
+            saveOrderLoading:true
+      };
+      case actionTypes.SAVE_ORDER_SUCCESS:
+        return {
+              ...state,
+              saveOrderLoading:false,
+              orderObj:{},
+              userObj:{},
+              cardObj:{},
+              orderNumber:action.orderNumber
+        };
+        case actionTypes.SAVE_ORDER_FAIL:
+          return {
+                ...state,
+                saveOrderLoading:false,
+                error:action.error
+          };
     default: {
       return state;
     }
